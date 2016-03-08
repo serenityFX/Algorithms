@@ -43,7 +43,21 @@ int Fibonacci::get_remainder(int64_t n, int m)
 	assert(n >= 1);
 	assert(m >= 2);
 
-	if (n == 1) return 1;
+	if (static_cast<int64_t>(m) == n) return 0;
+	if (static_cast<int64_t>(m) > n)
+	{
+		int *arr = new int[n+1];
+
+		arr[0] = 0;
+		arr[1] = 1;
+
+		for (int i = 2; i <= n; ++i)
+			arr[i] = arr[i - 1] + arr[i - 2];
+
+		int res = arr[n];
+		delete[] arr;
+		return res;
+	}
 
 	std::vector<int64_t> arr;
 	arr.push_back(0);

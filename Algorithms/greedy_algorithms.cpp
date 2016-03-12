@@ -38,3 +38,29 @@ bool greedy_algorithms::intersection(Segment & first, Segment & second)
 	return false;
 }
 //----------------------------------------------------------------------------------
+double greedy_algorithms::get_max_knapsack_value(int capacity, std::vector <Item> items) 
+{
+	double value = 0.0;
+
+	std::sort(items.begin(), items.end(), [](const Item &left, const Item &right)
+	{
+		return	(static_cast<double>(left.value) / static_cast<double>(left.weight)) >
+				(static_cast<double>(right.value) / static_cast<double>(right.weight));
+	} );
+
+
+	// take items while there is empty space in knapsack
+	for (auto &item : items) {
+		if (capacity > item.weight) {
+			// can take full item and continue
+			capacity -= item.weight;
+			value += item.value;
+		}
+		else {
+			value += item.value * (static_cast <double>(capacity) / item.weight);
+			break;
+		}
+	}
+
+	return value;
+}

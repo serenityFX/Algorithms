@@ -64,3 +64,59 @@ double greedy_algorithms::get_max_knapsack_value(int capacity, std::vector <Item
 
 	return value;
 }
+//----------------------------------------------------------------------------------
+std::unordered_map<char, std::string> greedy_algorithms::HuffmanEncode(const std::string &input)
+{
+	std::unordered_map<char, int> inpFreq;
+	for (auto in : input) inpFreq[in]++;
+
+	std::vector<Freq> freq;
+	for (auto f : inpFreq) freq.push_back({std::string(1,f.first),f.second});
+
+	if (freq.size() == 1)
+	{
+		std::unordered_map<char, std::string> result;
+		result[freq[0].symbol[0]] = "0";
+		return std::move(result);
+	}
+
+	std::priority_queue<Freq> q(freq.begin(),freq.end());
+	std::unordered_map<char, std::string> result;
+
+	while (q.size() >= 2)
+	{
+		auto first = q.top();
+		q.pop();
+		auto second = q.top();
+		q.pop();
+	
+		for (auto c : first.symbol) result[c] = "0" + result[c];
+		for (auto c : second.symbol) result[c] = "1" + result[c];
+	
+		q.push({first.symbol + second.symbol, first.frequency + second.frequency});
+	}
+
+	return result;
+}
+//----------------------------------------------------------------------------------
+std::string greedy_algorithms::HuffmanDecode(std::unordered_map<std::string,char> input, std::string inpText)
+{
+	std::string result;
+
+	auto i = inpText.begin();
+	std::string value;
+	while (i != inpText.end())
+	{
+		value += *i;
+		auto j = input.find(value);
+		if (j != input.end())
+		{
+			result += input[value];
+			value.clear();
+		}
+		++i;
+	}
+
+	return result;
+}
+//----------------------------------------------------------------------------------
